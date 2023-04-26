@@ -25,6 +25,23 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var min = 1;",
+							"var max = 100;",
+							"var randomNumber = Math.floor(Math.random() * (max - min + 1) + min);",
+							"pm.environment.set(\"randomNumber\", randomNumber);",
+							"",
+							"var createdUserId = pm.globals.get(\"created_user_id\");",
+							"var dynamicEmailNew = randomNumber + \"@piotr.pl\";",
+							"pm.variables.set(\"dynamicEmailNew\", dynamicEmailNew);",
+							""
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"protocolProfileBehavior": {
@@ -36,7 +53,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"value": "{{GOREST_API_TOKEN}}",
 							"type": "string"
 						}
 					]
@@ -45,7 +62,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"name\": \"John\",\n\"email\": \"john3@test.pl\",\n\"gender\": \"male\",\n\"status\": \"active\"\n}",
+					"raw": "{\n\"name\": \"John\",\n\"email\": \"{{dynamicEmailNew}}\",\n\"gender\": \"male\",\n\"status\": \"active\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -123,7 +140,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"value": "{{GOREST_API_TOKEN}}",
 							"type": "string"
 						}
 					]
@@ -190,7 +207,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"value": "{{GOREST_API_TOKEN}}",
 							"type": "string"
 						}
 					]
@@ -267,7 +284,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"value": "{{GOREST_API_TOKEN}}",
 							"type": "string"
 						}
 					]
@@ -312,7 +329,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"value": "{{GOREST_API_TOKEN}}",
 							"type": "string"
 						}
 					]
@@ -368,7 +385,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"value": "{{GOREST_API_TOKEN}}",
 							"type": "string"
 						}
 					]
