@@ -1,0 +1,397 @@
+{
+	"info": {
+		"_postman_id": "a56e0cbd-e674-4057-9846-1ccfb5a08328",
+		"name": "e2e_user_flow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27095276",
+		"_collection_link": "https://lively-station-590960.postman.co/workspace/Gorest~c6f64894-540a-46d0-9053-7982d06bdc99/collection/27095276-a56e0cbd-e674-4057-9846-1ccfb5a08328?action=share&creator=27095276&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "POST Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"    if (pm.response.code === 201) {",
+							"        var jsonData = pm.response.json();",
+							"        pm.globals.set(\"created_user_id\", jsonData.id);",
+							"    }",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"name\": \"John\",\n\"email\": \"john3@test.pl\",\n\"gender\": \"male\",\n\"status\": \"active\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "test@test.pl",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Single User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test 2: Response structure",
+							"pm.test(\"Response has correct structure\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.all.keys(\"id\", \"name\", \"email\", \"gender\", \"status\");",
+							"});",
+							"",
+							"// Test 3: Data types",
+							"pm.test(\"Response has correct data types\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.be.a(\"number\");",
+							"    pm.expect(jsonData.name).to.be.a(\"string\");",
+							"    pm.expect(jsonData.email).to.be.a(\"string\");",
+							"    pm.expect(jsonData.gender).to.be.a(\"string\");",
+							"    pm.expect(jsonData.status).to.be.a(\"string\");",
+							"});",
+							"",
+							"// Test 4: Valid data",
+							"pm.test(\"Response has valid data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email).to.match(/^\\S+@\\S+\\.\\S+$/); // Validate email format",
+							"    pm.expect(jsonData.gender).to.be.oneOf([\"male\", \"female\"]);",
+							"    pm.expect(jsonData.status).to.be.oneOf([\"active\", \"inactive\"]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{created_user_id}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{created_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test 2: Check if updated email has the specific value",
+							"pm.test(\"Email is updated to the specific value\", function () {",
+							"    var createdUserId = pm.globals.get(\"created_user_id\");",
+							"    var dynamicEmail = createdUserId + \"@piotr.pl\"; ",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email).to.equal(dynamicEmail);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var createdUserId = pm.globals.get(\"created_user_id\");",
+							"var dynamicEmail = createdUserId + \"@piotr.pl\";",
+							"pm.variables.set(\"dynamicEmail\", dynamicEmail);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"{{dynamicEmail}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users//{{created_user_id}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"",
+						"{{created_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All Users and verify if specifc exist with update email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test 2: Check if a user with a specific ID has a specific email",
+							"pm.test(\"User with specific ID has specific email\", function () {",
+							"    var createdUserId = pm.globals.get(\"created_user_id\");",
+							"    var dynamicEmail = createdUserId + \"@piotr.pl\"; ",
+							"    var jsonData = pm.response.json();",
+							"    var userFound = false;",
+							"    var userEmailIsCorrect = false;",
+							"",
+							"    jsonData.data.forEach(function (user) {",
+							"        if (user.id == createdUserId) {",
+							"            userFound = true;",
+							"            userEmailIsCorrect = (user.email == dynamicEmail);",
+							"        }",
+							"    });",
+							"",
+							"    pm.expect(userFound).to.be.true;",
+							"    pm.expect(userEmailIsCorrect).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v1/users",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove single user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{created_user_id}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{created_user_id}}"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "695",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify signle user does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 200",
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "5c56f8de35eb391f48199278529c82be7cdaa14f89fb66ad58abfa9eeb656ef0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{created_user_id}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{created_user_id}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
