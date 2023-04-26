@@ -29,6 +29,15 @@ To set up the CI/CD pipeline:
 2. GitHub Actions will automatically run the tests whenever there is a push or pull request to the `master` branch.
 3. Be sure to update the token variable with your own authentication token in `environment-file.json`.
 
+### Python Execution
+
+There is simple tests for python, the same which was use in Postman
+
+1. Update token in `go_test.py` file.
+2. Install `pip install requests` and create virtual environment `python -m venv venv`
+3. Activate the virtual environment `source venv/bin/activate` (for Unix-based systems) or `venv\Scripts\activate` (for Windows)
+4. Run `python go_test.py` to execute the Python tests.
+
 ## Final Solution
 
-The final solution includes a comprehensive Postman collection for testing one of the REST API resources on GoRest, along with a GitHub Actions workflow to execute the tests in a CI/CD pipeline. This ensures that any changes made to the API are automatically tested, improving the overall reliability and stability of the API.
+The final solution includes a comprehensive Postman collection for testing one of the REST API resources on GoRest, along with a GitHub Actions workflow to execute the tests in a CI/CD pipeline. Also few python tests for some request, but not for all. This ensures that any changes made to the API are automatically tested, improving the overall reliability and stability of the API.
