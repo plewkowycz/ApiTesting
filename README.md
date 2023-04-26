@@ -26,7 +26,7 @@ The tests can be executed as part of a CI/CD pipeline using [GitHub Actions](htt
 To set up the CI/CD pipeline:
 
 1. Push the `.github` directory and your Postman collection JSON file to your GitHub repository.
-2. GitHub Actions will automatically run the tests whenever there is a push or pull request to the `master` branch.
+2. GitHub Actions will automatically run the tests whenever there is a push or pull request to the `master` branch. Example of results can be found [here](https://github.com/plewkowycz/ApiTesting/actions/runs/4803640804)
 3. Be sure to update the token variable with your own authentication token in `environment-file.json`.
 
 ### Python Execution
