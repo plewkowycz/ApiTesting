@@ -25,4 +25,4 @@ jobs:
         run: npm install -g newman
 
       - name: Run Newman tests
-        run: newman run e2e_user_flow.postman_collection.json
+        run: newman run e2e_user_flow.postman_collection.json -e environment-file.json
